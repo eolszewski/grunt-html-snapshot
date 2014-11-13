@@ -43,6 +43,8 @@ module.exports = function(grunt) {
             return options.urls[options.urls.length - 1] === url;
         };
 
+        grunt.log.writeln('DEBUG - Setup');
+
         phantom.on(taskChannelPrefix + ".error.onError", function (msg, trace) {
             if (options.haltOnError) {
                 phantom.halt();
@@ -109,6 +111,7 @@ module.exports = function(grunt) {
         var sitePath = options.sitePath;
 
         grunt.util.async.forEachSeries(urls, function(url, next) {
+            grunt.log.writeln('DEBUG - Spawning new process');
 
             phantom.spawn(sitePath + url, {
                 // Additional PhantomJS options.
@@ -121,6 +124,7 @@ module.exports = function(grunt) {
                 },
                 // Complete the task when done.
                 done: function (err) {
+                    grunt.log.writeln('DEBUG - Done with this process, moving onto next one.');
                     if (err) {
                         // If there was an error, abort the series.
                         done();
