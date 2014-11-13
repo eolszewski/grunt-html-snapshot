@@ -87,6 +87,19 @@ module.exports = function(grunt) {
             grunt.log.writeln(fileName, 'written');
             phantom.halt();
 
+
+            var hrefs = msg.split('href="');
+
+            for(var i = 1; i < hrefs.length; i++){
+                var url = hrefs[i].substring(0, hrefs[i].indexOf('"'));
+
+                //Make sure the URL is a local one, and that the url is not actually a link to a file (e.g. in meta tags)
+                if(url.indexOf('/') === 0 && !(/\..*/.test(url)) && options.urls.indexOf(url) === -1){
+                    // grunt.log.writeln('Would have added this URL to the list: ' + url);
+                    options.urls.push(url);
+                }
+            }
+
             isLastUrl(plainUrl) && done();
         });
 
