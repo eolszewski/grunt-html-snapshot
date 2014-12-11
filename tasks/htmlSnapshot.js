@@ -125,8 +125,10 @@ module.exports = function(grunt) {
 
                 match = regularExpressions.title.exec(msg);
                 if(match != null){
-                    console.log('WE HAVE A MATCH!' + match[1]);
+                    // console.log('WE HAVE A MATCH!' + match[1]);
                     video.title = match[1];
+                }else{
+                    console.log('DIDNT FIND A MATCH FOR: ' + videoId);
                 }
             }
 
