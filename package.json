@@ -32,5 +32,6 @@
     "html",
     "snapshots",
     "gruntplugin"
-  ]
+  ],
+  "private": true
 }
