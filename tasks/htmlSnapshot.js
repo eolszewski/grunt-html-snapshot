@@ -78,9 +78,9 @@ module.exports = function(grunt) {
             }else{
                 // videoId = parseInt(plainUrl.replace('/', ''));
                 //We're on a video page and adding all the rest of the info the videos array
-                if(!videos[videoId]){ //############################
+                // if(!videos[videoId]){ //############################
                     //Houston, we have a problem
-                }
+                // }
 
                 // video = videos[videoId];
 
