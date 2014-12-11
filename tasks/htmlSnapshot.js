@@ -66,7 +66,7 @@ module.exports = function(grunt) {
                             '.html';
 
 
-            var matches = [], regexp = /<a[\s]+([^>]+)>((?:.(?!\<\/a\>))*.)<\/a>/g, match;
+            var matches = [], regexp = /data-original="[\s\S]*"/g, match;
 
             msg = msg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
             msg = msg.replace(/<style\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/style>/gi, '');
@@ -92,7 +92,7 @@ module.exports = function(grunt) {
                     if(match.indexOf('tag') !== -1){
                         continue;
                     }
-                    
+
                     matches.push(match);
                 }
 
