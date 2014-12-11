@@ -79,7 +79,7 @@ module.exports = function(grunt) {
             if(pagesVisited === 0){
                 //Since this is the first page, we're going to add all the other index pages
                 for(var i = 1; i <= 45; i++){
-                    // options.urls.push('/section/home/' + i);
+                    options.urls.push('/section/home/' + i);
                 }
             }
 
@@ -152,12 +152,12 @@ module.exports = function(grunt) {
             pagesVisited++;
 
 
-            if(isLastUrl(plainUrl) || pagesVisited >= 10){
+            if(isLastUrl(plainUrl) || pagesVisited >= 20000){
                 console.log('THIS WAS THE LAST URL');
                 grunt.file.write(fileName, JSON.stringify(videos));
             }
 
-            (pagesVisited >= 10 || isLastUrl(plainUrl)) && done();
+            (pagesVisited >= 20000 || isLastUrl(plainUrl)) && done();
         });
 
         var done = this.async();
