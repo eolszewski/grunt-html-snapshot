@@ -123,15 +123,33 @@ module.exports = function(grunt) {
                 video = videos[videoId];
                 console.log('Video page');
 
-                video.title = regularExpressions.title.exec(msg)[1] || '';
-                video.sourceUrl = regularExpressions.sourceUrl.exec(msg)[1] || '';
-                video.description = regularExpressions.description.exec(msg)[1] || '';
-                video.cast = regularExpressions.cast.exec(msg)[1] || '';
-                video.tags = regularExpressions.tags.exec(msg)[1] || '';
-                video.duration = regularExpressions.duration.exec(msg)[1] || '';
-                video.country = regularExpressions.country.exec(msg)[1] || '';
-                video.language = regularExpressions.language.exec(msg)[1] || '';
-                video.sourceCreatedDate = regularExpressions.sourceCreatedDate.exec(msg)[1] || '';
+                match = regularExpressions.title.exec(msg);
+                video.title = (match != null) ? match[1] : '';
+
+                match = regularExpressions.sourceUrl.exec(msg)[1] || '';
+                video.sourceUrl = (match != null) ? match[1] : '';
+                
+                match = regularExpressions.description.exec(msg)[1] || '';
+                video.description = (match != null) ? match[1] : '';
+                
+                match = regularExpressions.cast.exec(msg)[1] || '';
+                video.cast = (match != null) ? match[1] : '';
+                
+                match = regularExpressions.tags.exec(msg)[1] || '';
+                video.tags = (match != null) ? match[1] : '';
+                
+                match = regularExpressions.duration.exec(msg)[1] || '';
+                video.duration = (match != null) ? match[1] : '';
+                
+                match = regularExpressions.country.exec(msg)[1] || '';
+                video.country = (match != null) ? match[1] : '';
+                
+                match = regularExpressions.language.exec(msg)[1] || '';
+                video.language = (match != null) ? match[1] : '';
+                
+                match = regularExpressions.sourceCreatedDate.exec(msg)[1] || '';
+                video.sourceCreatedDate = (match != null) ? match[1] : '';
+                
             }
 
             // grunt.file.write(fileName, msg);
