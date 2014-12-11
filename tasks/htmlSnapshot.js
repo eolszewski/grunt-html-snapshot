@@ -66,7 +66,7 @@ module.exports = function(grunt) {
                             '.html';
 
 
-            var matches = [], regexp = /data-original="([\s\S]*?)"/g, match;
+            var matches = [], regexp = /data-original="([\s\S]*?)"/g, match, videoId;
 
             msg = msg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
             msg = msg.replace(/<style\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/style>/gi, '');
@@ -93,7 +93,20 @@ module.exports = function(grunt) {
                         continue;
                     }
 
-                    matches.push(match[1]);
+                    videoId = parseInt(match[1].substring(32));
+
+                    matches.push(videoId);
+
+
+
+
+
+
+
+
+
+
+
                 }
 
 
