@@ -87,6 +87,8 @@ module.exports = function(grunt) {
                     if(typeof match === 'undefined'){
                         console.log('match was undefined');
                         continue;
+                    }else{
+                        console.log('pushed a match');
                     }
                     matches.push(match);
                 }
