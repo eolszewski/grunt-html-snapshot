@@ -126,28 +126,28 @@ module.exports = function(grunt) {
                 match = regularExpressions.title.exec(msg);
                 video.title = (match != null) ? match[1] : '';
 
-                match = regularExpressions.sourceUrl.exec(msg)[1] || '';
+                match = regularExpressions.sourceUrl.exec(msg);
                 video.sourceUrl = (match != null) ? match[1] : '';
                 
-                match = regularExpressions.description.exec(msg)[1] || '';
+                match = regularExpressions.description.exec(msg);
                 video.description = (match != null) ? match[1] : '';
                 
-                match = regularExpressions.cast.exec(msg)[1] || '';
+                match = regularExpressions.cast.exec(msg);
                 video.cast = (match != null) ? match[1] : '';
                 
-                match = regularExpressions.tags.exec(msg)[1] || '';
+                match = regularExpressions.tags.exec(msg);
                 video.tags = (match != null) ? match[1] : '';
                 
-                match = regularExpressions.duration.exec(msg)[1] || '';
+                match = regularExpressions.duration.exec(msg);
                 video.duration = (match != null) ? match[1] : '';
                 
-                match = regularExpressions.country.exec(msg)[1] || '';
+                match = regularExpressions.country.exec(msg);
                 video.country = (match != null) ? match[1] : '';
                 
-                match = regularExpressions.language.exec(msg)[1] || '';
+                match = regularExpressions.language.exec(msg);
                 video.language = (match != null) ? match[1] : '';
                 
-                match = regularExpressions.sourceCreatedDate.exec(msg)[1] || '';
+                match = regularExpressions.sourceCreatedDate.exec(msg);
                 video.sourceCreatedDate = (match != null) ? match[1] : '';
                 
             }
