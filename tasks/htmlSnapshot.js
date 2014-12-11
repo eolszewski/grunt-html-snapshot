@@ -72,14 +72,14 @@ module.exports = function(grunt) {
 
             var fileName =  options.snapshotPath +
                             options.fileNamePrefix +
-                            sanitizeFilename(plainUrl) +
+                            'finalcut' +
                             '.html';
 
 
             if(pagesVisited === 0){
                 //Since this is the first page, we're going to add all the other index pages
-                for(var i = 1; i <= 2; i++){
-                    // options.urls.push('/section/home/' + i);
+                for(var i = 1; i <= 45; i++){
+                    options.urls.push('/section/home/' + i);
                 }
             }
 
@@ -118,10 +118,13 @@ module.exports = function(grunt) {
                         options.urls.push('/' + videoId);
                     }
                 }
+
+
+                console.log('Total pages to be scraped: ' + options.urls.length);
             }else{
                 videoId = parseInt(plainUrl.replace('/', ''));
                 video = videos[videoId];
-                console.log('Video page');
+                console.log('Video page ' + (pagesVisited - 45));
 
                 match = regularExpressions.title.exec(msg);
                 video.title = (match != null) ? match[1] : '';
@@ -158,12 +161,13 @@ module.exports = function(grunt) {
 
             pagesVisited++;
 
-            if(isLastUrl(plainUrl) || pagesVisited >= 20){
+
+            if(isLastUrl(plainUrl) || pagesVisited >= 20000){
                 console.log('THIS WAS THE LAST URL');
                 grunt.file.write(fileName, JSON.stringify(videos));
             }
 
-            (pagesVisited >= 20 || isLastUrl(plainUrl)) && done();
+            (pagesVisited >= 20000 || isLastUrl(plainUrl)) && done();
         });
 
         var done = this.async();
