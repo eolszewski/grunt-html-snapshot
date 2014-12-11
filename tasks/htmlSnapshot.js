@@ -65,6 +65,9 @@ module.exports = function(grunt) {
                             sanitizeFilename(plainUrl) +
                             '.html';
 
+
+            var matches = [], regexp = /<a[^>]*>([^<]+)</a>/g;
+
             msg = msg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
             msg = msg.replace(/<style\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/style>/gi, '');
             msg = msg.replace(/<link\s.*?(\/)?>/gi, '');
@@ -77,6 +80,13 @@ module.exports = function(grunt) {
                 //and saving thumbnails to the videos array
 
                 console.log('We are looking at an index page');
+                
+
+
+                while ((match = regexp.exec(msg)) != null) {
+                    matches.push(match);
+                }
+
 
                 // videoId = parseInt(plainUrl.replace('/', ''));
                 // thumbnail = '';
@@ -95,7 +105,8 @@ module.exports = function(grunt) {
                 console.log('We are looking at a video page');
             }
 
-            grunt.file.write(fileName, msg);
+            grunt.file.write(fileName, matches.join('/n'));
+            // grunt.file.write(fileName, msg);
             grunt.log.writeln(fileName, 'written');
             phantom.halt();
 
