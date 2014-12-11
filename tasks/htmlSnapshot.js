@@ -79,7 +79,7 @@ module.exports = function(grunt) {
             if(pagesVisited === 0){
                 //Since this is the first page, we're going to add all the other index pages
                 for(var i = 1; i <= 2; i++){
-                    options.urls.push('/section/home/' + i);
+                    // options.urls.push('/section/home/' + i);
                 }
             }
 
@@ -123,13 +123,15 @@ module.exports = function(grunt) {
                 video = videos[videoId];
                 console.log('Video page');
 
-                match = regularExpressions.title.exec(msg);
-                if(match != null){
-                    // console.log('WE HAVE A MATCH!' + match[1]);
-                    video.title = match[1];
-                }else{
-                    console.log('DIDNT FIND A MATCH FOR: ' + videoId);
-                }
+                video.title = regularExpressions.title.exec(msg)[1] || '';
+                video.sourceUrl = regularExpressions.sourceUrl.exec(msg)[1] || '';
+                video.description = regularExpressions.description.exec(msg)[1] || '';
+                video.cast = regularExpressions.cast.exec(msg)[1] || '';
+                video.tags = regularExpressions.tags.exec(msg)[1] || '';
+                video.duration = regularExpressions.duration.exec(msg)[1] || '';
+                video.country = regularExpressions.country.exec(msg)[1] || '';
+                video.language = regularExpressions.language.exec(msg)[1] || '';
+                video.sourceCreatedDate = regularExpressions.sourceCreatedDate.exec(msg)[1] || '';
             }
 
             // grunt.file.write(fileName, msg);
@@ -138,12 +140,12 @@ module.exports = function(grunt) {
 
             pagesVisited++;
 
-            if(isLastUrl(plainUrl) || pagesVisited >= 10){
+            if(isLastUrl(plainUrl) || pagesVisited >= 20){
                 console.log('THIS WAS THE LAST URL');
                 grunt.file.write(fileName, JSON.stringify(videos));
             }
 
-            (pagesVisited >= 10 || isLastUrl(plainUrl)) && done();
+            (pagesVisited >= 20 || isLastUrl(plainUrl)) && done();
         });
 
         var done = this.async();
