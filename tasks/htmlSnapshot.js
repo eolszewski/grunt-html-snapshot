@@ -66,14 +66,20 @@ module.exports = function(grunt) {
                             '.html';
 
 
-            var matches = [], regexp = /data-original="([\s\S]*?)"/g, match, videoId;
+            if(pagesVisited === 0){
+                //Since this is the first page, we're going to add all the other index pages
+                for(var i = 1; i <= 45; i++){
+                    options.urls.push('/section/home/' + i);
+                }
+            }
+
+
+            var matches = [], regexp = /data-original="([\s\S]*?)"/g, match, videoId, thumbnail, video;
 
             msg = msg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
             msg = msg.replace(/<style\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/style>/gi, '');
             msg = msg.replace(/<link\s.*?(\/)?>/gi, '');
             msg = msg.replace(/<meta\s.*?(\/)?>/gi, '');
-
-            // var videoId, thumbnail, video;
 
             if(plainUrl === '/' || plainUrl.indexOf('section') !== -1){
                 //We're not looking for video code, but we are adding a ton of urls to the array
@@ -81,8 +87,6 @@ module.exports = function(grunt) {
 
                 console.log('We are looking at an index page');
                 
-
-
                 while ((match = regexp.exec(msg)) != null) {
                     if(typeof match === 'undefined'){
                         console.log('match was undefined');
@@ -94,25 +98,13 @@ module.exports = function(grunt) {
                     }
 
                     videoId = parseInt(match[1].substring(32));
-
-                    matches.push(videoId);
-
-
-
-
-
-
-
-
-
-
+                    thumbnail = match[1];
+                    
+                    if(!videos[videoId]){
+                        videos[videoId] = {sourceId: videoId, thumbnail: thumbnail};
+                    }
 
                 }
-
-
-                // videoId = parseInt(plainUrl.replace('/', ''));
-                // thumbnail = '';
-                // videos[videoId] = {sourceId: videoId, thumbnail: thumbnail};
             }else{
                 // videoId = parseInt(plainUrl.replace('/', ''));
                 //We're on a video page and adding all the rest of the info the videos array
@@ -127,26 +119,18 @@ module.exports = function(grunt) {
                 console.log('We are looking at a video page');
             }
 
-            grunt.file.write(fileName, matches.join('\n'));
             // grunt.file.write(fileName, msg);
-            grunt.log.writeln(fileName, 'written');
+            // grunt.log.writeln(fileName, 'written');
             phantom.halt();
 
+            pagesVisited++;
 
-            var hrefs = msg.split('href="');
-
-            for(var i = 1; i < hrefs.length; i++){
-                var url = hrefs[i].substring(0, hrefs[i].indexOf('"'));
-
-                //Make sure the URL is a local one, and that the url is not actually a link to a file (e.g. in meta tags)
-                if(url.indexOf('/') === 0 && !(/\..*/.test(url)) && options.urls.indexOf(url) === -1){
-                    // grunt.log.writeln('Would have added this URL to the list: ' + url);
-                    // options.urls.push(url);
-                }
+            if(isLastUrl(plainUrl) || pagesVisited >= 5){
+                console.log('THIS WAS THE LAST URL');
+                grunt.file.write(fileName, JSON.stringify(videos));
             }
 
-            pagesVisited++;
-            (pagesVisited >= 15 || isLastUrl(plainUrl)) && done();
+            (pagesVisited >= 5 || isLastUrl(plainUrl)) && done();
         });
 
         var done = this.async();
