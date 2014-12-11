@@ -16,7 +16,17 @@ module.exports = function(grunt) {
 
     var asset = path.join.bind(null, __dirname, '..');
 
-    var videos = {}, pagesVisited = 0;
+    var videos = {}, pagesVisited = 0, regularExpressions = {
+        title: /<h1>([\s\S]*?)<\/h1>/g,
+        sourceUrl: /<a href="(http:\/\/video\.mystreamservice\.com[\s\S]*?\.mp4)/g,
+        description: /<td class="synopsis more"[\s\S]*?>([\s\S]*?)<\/td>/g,
+        cast: /<th>Cast<\/th>[\s\S]*?<td>([\s\S]*?)<\/td>/g,
+        tags: /<th>Tags<\/th>[\s\S]*?<td>([\s\S]*?)<\/td>/g,
+        duration: /<th>Runtime<\/th>[\s\S]*?<td>([\s\S]*?)<\/td>/g,
+        country: /<th>Country<\/th>[\s\S]*?<td>([\s\S]*?)<\/td>/g,
+        language: /<th>Language<\/th>[\s\S]*?<td>([\s\S]*?)<\/td>/g,
+        sourceCreatedDate: /<th>Published<\/th>[\s\S]*?<td>([\s\S]*?)<\/td>/g
+    };
 
     grunt.registerMultiTask('crawler','fetch html snapshots', function(){
 
@@ -68,7 +78,7 @@ module.exports = function(grunt) {
 
             if(pagesVisited === 0){
                 //Since this is the first page, we're going to add all the other index pages
-                for(var i = 1; i <= 45; i++){
+                for(var i = 1; i <= 2; i++){
                     options.urls.push('/section/home/' + i);
                 }
             }
@@ -104,19 +114,20 @@ module.exports = function(grunt) {
                         videos[videoId] = {sourceId: videoId, thumbnail: thumbnail};
                     }
 
+                    if(options.urls.indexOf('/' + videoId) === -1){
+                        options.urls.push('/' + videoId);
+                    }
                 }
             }else{
-                // videoId = parseInt(plainUrl.replace('/', ''));
-                //We're on a video page and adding all the rest of the info the videos array
-                // if(!videos[videoId]){ //############################
-                    //Houston, we have a problem
-                // }
+                videoId = parseInt(plainUrl.replace('/', ''));
+                video = videos[videoId];
+                console.log('Video page');
 
-                // video = videos[videoId];
-
-                // video.country = country;
-
-                console.log('We are looking at a video page');
+                match = regularExpressions.title.exec(msg);
+                if(match != null){
+                    console.log('WE HAVE A MATCH!' + match[1]);
+                    video.title = match[1];
+                }
             }
 
             // grunt.file.write(fileName, msg);
@@ -125,12 +136,12 @@ module.exports = function(grunt) {
 
             pagesVisited++;
 
-            if(isLastUrl(plainUrl) || pagesVisited >= 5){
+            if(isLastUrl(plainUrl) || pagesVisited >= 10){
                 console.log('THIS WAS THE LAST URL');
                 grunt.file.write(fileName, JSON.stringify(videos));
             }
 
-            (pagesVisited >= 5 || isLastUrl(plainUrl)) && done();
+            (pagesVisited >= 10 || isLastUrl(plainUrl)) && done();
         });
 
         var done = this.async();
