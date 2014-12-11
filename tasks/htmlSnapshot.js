@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 
         phantom.on(taskChannelPrefix + ".error.onError", function (msg, trace) {
             if (options.haltOnError) {
-                phantom.halt();
+                // phantom.halt();
                 grunt.warn('error: ' + msg, 6);
             } else {
                 grunt.log.writeln(msg);
