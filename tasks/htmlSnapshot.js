@@ -84,6 +84,10 @@ module.exports = function(grunt) {
 
 
                 while ((match = regexp.exec(msg)) != null) {
+                    if(typeof match === 'undefined'){
+                        console.log('match was undefined');
+                        continue;
+                    }
                     matches.push(match);
                 }
 
