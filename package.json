@@ -1,5 +1,5 @@
 {
-  "name": "grunt-html-snapshot",
+  "name": "grunt-crawler",
   "version": "0.6.1",
   "description": "A grunt task that fetches html snapshots of your web app for easier SEO",
   "author": {

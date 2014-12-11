@@ -16,7 +16,9 @@ module.exports = function(grunt) {
 
     var asset = path.join.bind(null, __dirname, '..');
 
-    grunt.registerMultiTask('htmlSnapshot','fetch html snapshots', function(){
+    var videos = {};
+
+    grunt.registerMultiTask('crawler','fetch html snapshots', function(){
 
         var options = this.options({
           urls: [],
@@ -27,9 +29,6 @@ module.exports = function(grunt) {
           },
           snapshotPath: '',
           sitePath: '',
-          removeScripts: false,
-          removeLinkTags: false,
-          removeMetaTags: false,
           replaceStrings: [],
           haltOnError: true
         });
@@ -66,24 +65,27 @@ module.exports = function(grunt) {
                             sanitizeFilename(plainUrl) +
                             '.html';
 
-            if (options.removeScripts){
-                msg = msg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-            }
+            // var videoId, thumbnail, video;
 
-            if (options.removeLinkTags){
-                msg = msg.replace(/<link\s.*?(\/)?>/gi, '');
-            }
+            if(plainUrl === '/' || plainUrl.indexOf('section') !== -1){
+                //We're not looking for video code, but we are adding a ton of urls to the array
+                //and saving thumbnails to the videos array
 
-            if (options.removeMetaTags) {
-                msg = msg.replace(/<meta\s.*?(\/)?>/gi, '');
-            }
 
-            options.replaceStrings.forEach(function(obj) {
-                var key = Object.keys(obj);
-                var value = obj[key];
-                var regex = new RegExp(key, 'g');
-                msg = msg.replace(regex, value);
-            });
+                videoId = parseInt(plainUrl.replace('/', ''));
+                thumbnail = '';
+                videos[videoId] = {sourceId: videoId, thumbnail: thumbnail};
+            }else{
+                videoId = parseInt(plainUrl.replace('/', ''));
+                //We're on a video page and adding all the rest of the info the videos array
+                if(!videos[videoId]){ //############################
+                    //Houston, we have a problem
+                }
+
+                video = videos[videoId];
+
+                // video.country = country;
+            }
 
             grunt.file.write(fileName, msg);
             grunt.log.writeln(fileName, 'written');
@@ -98,7 +100,7 @@ module.exports = function(grunt) {
                 //Make sure the URL is a local one, and that the url is not actually a link to a file (e.g. in meta tags)
                 if(url.indexOf('/') === 0 && !(/\..*/.test(url)) && options.urls.indexOf(url) === -1){
                     // grunt.log.writeln('Would have added this URL to the list: ' + url);
-                    options.urls.push(url);
+                    // options.urls.push(url);
                 }
             }
 
