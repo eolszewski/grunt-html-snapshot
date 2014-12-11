@@ -16,7 +16,7 @@ module.exports = function(grunt) {
 
     var asset = path.join.bind(null, __dirname, '..');
 
-    var videos = {};
+    var videos = {}, pagesVisited = 0;
 
     grunt.registerMultiTask('crawler','fetch html snapshots', function(){
 
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         phantom.on(taskChannelPrefix + ".error.onError", function (msg, trace) {
             if (options.haltOnError) {
                 // phantom.halt();
-                grunt.warn('error: ' + msg, 6);
+                // grunt.warn('error: ' + msg, 6);
             } else {
                 grunt.log.writeln(msg);
             }
@@ -65,12 +65,18 @@ module.exports = function(grunt) {
                             sanitizeFilename(plainUrl) +
                             '.html';
 
+            msg = msg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+            msg = msg.replace(/<style\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/style>/gi, '');
+            msg = msg.replace(/<link\s.*?(\/)?>/gi, '');
+            msg = msg.replace(/<meta\s.*?(\/)?>/gi, '');
+
             // var videoId, thumbnail, video;
 
             if(plainUrl === '/' || plainUrl.indexOf('section') !== -1){
                 //We're not looking for video code, but we are adding a ton of urls to the array
                 //and saving thumbnails to the videos array
 
+                console.log('We are looking at an index page');
 
                 // videoId = parseInt(plainUrl.replace('/', ''));
                 // thumbnail = '';
@@ -85,6 +91,8 @@ module.exports = function(grunt) {
                 // video = videos[videoId];
 
                 // video.country = country;
+
+                console.log('We are looking at a video page');
             }
 
             grunt.file.write(fileName, msg);
@@ -104,7 +112,8 @@ module.exports = function(grunt) {
                 }
             }
 
-            isLastUrl(plainUrl) && done();
+            pagesVisited++;
+            (pagesVisited >= 15 || isLastUrl(plainUrl)) && done();
         });
 
         var done = this.async();
