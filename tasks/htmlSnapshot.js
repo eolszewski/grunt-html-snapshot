@@ -93,7 +93,7 @@ module.exports = function(grunt) {
                         continue;
                     }
 
-                    matches.push(match);
+                    matches.push(match[1]);
                 }
 
 
