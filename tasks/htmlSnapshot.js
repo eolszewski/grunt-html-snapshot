@@ -72,17 +72,17 @@ module.exports = function(grunt) {
                 //and saving thumbnails to the videos array
 
 
-                videoId = parseInt(plainUrl.replace('/', ''));
-                thumbnail = '';
-                videos[videoId] = {sourceId: videoId, thumbnail: thumbnail};
+                // videoId = parseInt(plainUrl.replace('/', ''));
+                // thumbnail = '';
+                // videos[videoId] = {sourceId: videoId, thumbnail: thumbnail};
             }else{
-                videoId = parseInt(plainUrl.replace('/', ''));
+                // videoId = parseInt(plainUrl.replace('/', ''));
                 //We're on a video page and adding all the rest of the info the videos array
                 if(!videos[videoId]){ //############################
                     //Houston, we have a problem
                 }
 
-                video = videos[videoId];
+                // video = videos[videoId];
 
                 // video.country = country;
             }
