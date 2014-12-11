@@ -79,7 +79,7 @@ module.exports = function(grunt) {
             if(pagesVisited === 0){
                 //Since this is the first page, we're going to add all the other index pages
                 for(var i = 1; i <= 45; i++){
-                    options.urls.push('/section/home/' + i);
+                    // options.urls.push('/section/home/' + i);
                 }
             }
 
@@ -126,32 +126,22 @@ module.exports = function(grunt) {
                 video = videos[videoId];
                 console.log('Video page ' + (pagesVisited - 45));
 
-                match = regularExpressions.title.exec(msg);
-                video.title = (match != null) ? match[1] : '';
+                var title = msg.split('<h1>');
+                video.title = title[1].substring(0, title[1].indexOf('</h1>'));
 
-                match = regularExpressions.sourceUrl.exec(msg);
-                video.sourceUrl = (match != null) ? match[1] : '';
+                var src = msg.split('col-right');
+                video.sourceUrl = src[1].substring(0, src[1].indexOf('download'));
+
+                var description = msg.split('<td class="synopsis more" colspan="2">');
+                video.description = description[1].substring(0, description[1].indexOf('</td>'));
                 
-                match = regularExpressions.description.exec(msg);
-                video.description = (match != null) ? match[1] : '';
-                
-                match = regularExpressions.cast.exec(msg);
-                video.cast = (match != null) ? match[1] : '';
-                
-                match = regularExpressions.tags.exec(msg);
-                video.tags = (match != null) ? match[1] : '';
-                
-                match = regularExpressions.duration.exec(msg);
-                video.duration = (match != null) ? match[1] : '';
-                
-                match = regularExpressions.country.exec(msg);
-                video.country = (match != null) ? match[1] : '';
-                
-                match = regularExpressions.language.exec(msg);
-                video.language = (match != null) ? match[1] : '';
-                
-                match = regularExpressions.sourceCreatedDate.exec(msg);
-                video.sourceCreatedDate = (match != null) ? match[1] : '';
+                var tableFields = msg.split('<td>');
+                video.pornstars = tableFields[1].substring(0, tableFields[1].indexOf('</td>'));
+                video.tags = tableFields[2].substring(0, tableFields[2].indexOf('</td>'));
+                video.duration = tableFields[3].substring(0, tableFields[3].indexOf('</td>'));
+                video.country = tableFields[4].substring(0, tableFields[4].indexOf('</td>'));
+                video.language = tableFields[5].substring(0, tableFields[5].indexOf('</td>'));
+                video.sourceCreatedDate = tableFields[6].substring(0, tableFields[6].indexOf('</td>'));
                 
             }
 
@@ -162,12 +152,12 @@ module.exports = function(grunt) {
             pagesVisited++;
 
 
-            if(isLastUrl(plainUrl) || pagesVisited >= 20000){
+            if(isLastUrl(plainUrl) || pagesVisited >= 10){
                 console.log('THIS WAS THE LAST URL');
                 grunt.file.write(fileName, JSON.stringify(videos));
             }
 
-            (pagesVisited >= 20000 || isLastUrl(plainUrl)) && done();
+            (pagesVisited >= 10 || isLastUrl(plainUrl)) && done();
         });
 
         var done = this.async();
