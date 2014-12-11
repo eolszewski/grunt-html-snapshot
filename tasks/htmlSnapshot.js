@@ -114,7 +114,7 @@ module.exports = function(grunt) {
                 console.log('We are looking at a video page');
             }
 
-            grunt.file.write(fileName, matches.join('/n'));
+            grunt.file.write(fileName, matches.join('\n'));
             // grunt.file.write(fileName, msg);
             grunt.log.writeln(fileName, 'written');
             phantom.halt();
