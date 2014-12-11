@@ -66,7 +66,7 @@ module.exports = function(grunt) {
                             '.html';
 
 
-            var matches = [], regexp = /<a[^>]*>([^<]+)</a>/g;
+            var matches = [], regexp = /<a[^>]*>([^<]+)<\/a>/g;
 
             msg = msg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
             msg = msg.replace(/<style\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/style>/gi, '');
